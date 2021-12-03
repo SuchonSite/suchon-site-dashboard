@@ -1,7 +1,12 @@
 import React, { useState, useEffect} from "react";
 import { Modal, Button, Form, Input, DatePicker } from "antd";
+import axios from '../http'
+import moment from 'moment';
+
 
 const AddPeopleModal = ({className, date, getPeople}) => {
+  
+  const dateFormat = "DD-MM-YYYY";
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [birthDate, setBirthDate] = useState("");
@@ -13,6 +18,13 @@ const AddPeopleModal = ({className, date, getPeople}) => {
   };
 
   const handleOk = () => {
+    axios.patch("/add/" + moment().format(dateFormat), {
+        "name": form.getFieldValue().name,
+        "surname": form.getFieldValue().surname,
+        "birth_date": birthDate,
+        "citizen_id": form.getFieldValue().citizen_id,
+        "address": form.getFieldValue().address
+      })
     form.submit()
   };
 
@@ -39,8 +51,6 @@ const AddPeopleModal = ({className, date, getPeople}) => {
       console.log(dateString);
       setBirthDate(dateString)
   }
-
-  const dateFormat = "DD-MM-YYYY";
 
   return (
     <>

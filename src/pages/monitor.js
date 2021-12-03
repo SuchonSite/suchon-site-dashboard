@@ -9,18 +9,20 @@ import axios from '../http'
 import AddPeopleModal from '../components/addPeopleModal';
 
 import { FaSyringe } from 'react-icons/fa'
+import moment from 'moment';
+
 
 const { Column, ColumnGroup } = Table;
-
-
 
 const { Header, Footer, Content } = Layout;
 const { SubMenu } = Menu;
 
 const Monitor = () => {
 
+  const dateFormat = "DD-MM-YYYY";
+
   const [people, setPeople] = useState([])
-  const [date, setDate] = useState("")
+  const [date, setDate] = useState(moment().format(dateFormat))
   const [loading, setLoading] = useState(false)
 
   const getPeople = async (date) => {
@@ -38,7 +40,7 @@ const Monitor = () => {
   }
 
   useEffect(() => {
-    getPeople('20-10-2021')
+    getPeople(date)
   }, [])
 
   const onChange = (_, dateString) => {
@@ -58,8 +60,6 @@ const Monitor = () => {
     await axios.patch("cancel/" + date + "/" + reservation_id)
     getPeople(date);
   }
-
-  const dateFormat = "DD-MM-YYYY";
 
     const p = [
       {
@@ -130,7 +130,7 @@ const Monitor = () => {
               getPeople={getPeople}
             />
             <DatePicker onChange={onChange} format={dateFormat} />
-            <Table dataSource={p} loading={loading}>
+            <Table dataSource={people} loading={loading}>
               <Column
                 title="Reservation ID"
                 dataIndex="reservation_id"
